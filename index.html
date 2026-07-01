@@ -5,51 +5,32 @@
   <title>imaginace</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <div id="loginScreen">
-
 <h2>imaginace login</h2>
-
 <input id="username" placeholder="Username">
-
 <br>	
-
 <input id="password" type="password" placeholder="Password">
-
 <br><br>
-
 <button id="register">
 Register
 </button>
-
-
 <button id="login">
 Login
 </button>
-
-
 <p id="loginMessage"></p>
-
 </div>
-
 <div id="website">
-
   <!-- TOP NETWORK BAR -->
   <div class="topbar">
     <span>imaginace is in your extended network</span>
   </div>
-
   <!-- MAIN WRAPPER -->
   <div class="layout">
-
     <!-- LEFT COLUMN -->
     <div class="left">
-
       <div class="profile">
         <img class="pfp" src="https://i.imgur.com/8Km9tLL.png" />
-
         <h1>imaginace</h1>
         <p class="meta">
           "oddfutur.com" <br>
@@ -57,40 +38,33 @@ Login
           last login: 15/07/2020
         </p>
       </div>
-
       <div class="box">
         <h2>Contact</h2>
-        <button onclick="alert('Message sent')">Send Message</button>
-        <button onclick="alert('Added!')">Add Friend</button>
-        <button onclick="alert('Blocked!')">Block</button>
+        <button id="sendMessageBtn">Send Message</button>
+        <button id="addFriendBtn">Add Friend</button>
+        <button id="blockBtn">Block</button>
       </div>
-
       <div class="box">
         <h2>Music</h2>
         <audio controls autoplay loop>
           <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
         </audio>
       </div>
-
       <div class="box small">
         <h2>URL</h2>
         <p>https://myspace.windows93.net/?id=3737</p>
       </div>
-
     </div>
-
     <!-- RIGHT COLUMN -->
     <div class="right">
-
       <div class="box">
-        <h2>imaginance blurbs/h2>
+        <h2>imaginance blurbs</h2>
         <p>
           Im 16, I like girls, and the guitar is nice.
           <br><br>
           [edit this text freely]
         </p>
       </div>
-
       <div class="box">
         <h2>Latest Blog Entry</h2>
         <p>
@@ -98,69 +72,48 @@ Login
           - song 1<br>
           - song 2<br>
           - song 3<br><br>
-
           [write your own blog text here]
         </p>
       </div>
-
-
-
 <div class="chaos">
-
 <span class="red">
 SAVE CREATOR A COMMENT
 </span>
-
 <br><br>
-
 IM 18, I LIKE GIRLS,
 AND THE PIANO IS NICE.
-
 <br><br>
-
 I DON'T REALLY KNOW WHAT
 THIS PAGE IS ANYMORE.
-
 <br>
-
 <span class="blue">
 internet was different back then
 </span>
-
 </div>
-
       <div class="box">
         <h2>Comments</h2>
-
         <div class="comment">
           <b>User1:</b> yo this page is insane
         </div>
-
         <div class="comment">
           <b>User2:</b> add me back pls
         </div>
-
         <div class="comment">
           <b>User3:</b> [editable comment]
         </div>
-
       </div>
-
       <div class="box">
         <h2>Guestbook</h2>
         <input id="gb" placeholder="sign here...">
-        <button onclick="signGuestbook()">Submit</button>
+        <button id="gbSubmit">Submit</button>
       </div>
-
     </div>
   </div>
-
   <!-- VISITOR COUNTER -->
   <div class="footer">
     visitor number: <span id="counter">0</span>
   </div>
 </div>
-
 <script type="module" src="script.js"></script>
 </body>
 </html>

@@ -1,392 +1,142 @@
 body {
-
 margin:0;
-
 font-family:Bahnschrift, Arial, sans-serif;
-
 background:
 url("https://i.imgflip.com/12ze8h.jpg");
-
 background-size:cover;
-
 background-attachment:fixed;
-
 color:white;
-
 }
-
-
-
 .topbar {
-
 background:rgba(20,20,20,0.75);
-
 padding:12px;
-
 text-align:center;
-
 font-size:22px;
-
 font-weight:bold;
-
 }
-
-
-
 /* Hauptaufteilung wie Screenshot */
-
 .layout {
-
-
 display:flex;
-
 justify-content:center;
-
 gap:25px;
-
 padding:30px;
-
-
 }
-
-
-
 .left {
-
-
 width:270px;
-
-
 }
-
-
-
 .right {
-
-
 width:520px;
-
-
 }
-
-
-
 /* normale Myspace Boxen */
-
 .box {
-
-
 background:rgba(25,25,35,0.75);
-
-
 border:1px solid rgba(255,255,255,.7);
-
-
 padding:12px;
-
-
 margin-bottom:18px;
-
-
 }
-
-
-
 .profile {
-
-
 border:1px solid black;
-
-
 padding:12px;
-
-
 text-align:left;
-
-
 }
-
-
-
 .pfp {
-
-
 width:150px;
-
-
 height:150px;
-
-
 object-fit:cover;
-
-
 border:2px solid #65ff65;
-
-
 }
-
-
-
 h1 {
-
-
 font-size:38px;
-
-
 margin:5px;
-
-
 color:#8cff8c;
-
-
 font-weight:bold;
-
-
 }
-
-
-
 h2 {
-
-
 font-size:20px;
-
-
 font-weight:bold;
-
-
 text-decoration:none;
-
-
 }
-
-
-
 .meta {
-
-
 font-size:14px;
-
-
 color:#ddd;
-
-
 }
-
-
-
-
 /* einzelne Texte ohne Box */
-
 .plain {
-
-
 padding:10px;
-
-
 font-size:18px;
-
-
 line-height:1.4;
-
-
 }
-
-
-
-
-
 .highlight {
-
-
 color:#ffcc66;
-
-
 }
-
-
-
 .blue {
-
-
 color:#6fb8ff;
-
-
 }
-
-
-
 .red {
-
-
 color:#ff6b6b;
-
-
 }
-
-
-
 /* etwas wie die Screenshots */
-
 .blog {
-
-
 background:none;
-
-
 border:none;
-
-
 }
-
-
-
 .chaos {
-
-
 background:rgba(0,0,0,.35);
-
-
 border:none;
-
-
 font-size:22px;
-
-
 padding:20px;
-
-
 margin-top:20px;
-
-
 }
-
-
-
 /* Buttons */
-
 button {
-
-
 font-family:Bahnschrift;
-
-
 background:#b5a642;
-
-
 border:1px solid black;
-
-
 padding:4px;
-
-
 }
-
-
-
 /* Kommentare */
-
 .comment {
-
-
 border-top:1px solid gray;
-
-
 padding:8px;
-
-
 font-size:14px;
-
-
 }
-
-
-
 .footer {
-
-
 text-align:center;
-
-
 background:rgba(0,0,0,.7);
-
-
 padding:10px;
-
-
 }
-
 #loginScreen {
-
 position:fixed;
-
 top:0;
 left:0;
-
 width:100%;
 height:100%;
-
 background:#111;
-
 display:flex;
-
 flex-direction:column;
-
 justify-content:center;
-
 align-items:center;
-
 z-index:99999;
-
 font-family:Bahnschrift;
-
 }
-
-
 #loginScreen h2 {
-
 font-weight:bold;
-
 }
-
-
-
 #loginScreen input {
-
 padding:8px;
-
 margin:5px;
-
 font-family:Bahnschrift;
-
 z-index:100000;
-
 }
-
-
-
 #loginScreen button {
-
 background:#b5a642;
-
 border:1px solid black;
-
 padding:8px 20px;
-
 margin:5px;
-
 font-family:Bahnschrift;
-
 cursor:pointer;
-
 z-index:100000;
-
 }
-
-
-
 #website {
-
 display:none;
-
 }
