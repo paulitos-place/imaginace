@@ -113,6 +113,23 @@ internet was different back then
   <div class="footer">
     visitor number: <span id="counter">0</span>
   </div>
+
+  <!-- CHAT WIDGET -->
+  <div id="chatToggle">💬 Chat</div>
+  <div id="chatPopup" class="hidden">
+    <div class="chat-header">
+      <span>imaginace chat</span>
+      <button id="chatClose">✕</button>
+    </div>
+    <div id="chatMessages" class="chat-messages">
+      <div id="chatLoadingOlder" class="chat-loading hidden">lade ältere Nachrichten...</div>
+    </div>
+    <div class="chat-input-row">
+      <input id="chatInput" maxlength="100" placeholder="Nachricht...">
+      <button id="chatSend">➤</button>
+    </div>
+    <div id="chatCharCount" class="chat-charcount">0/100</div>
+  </div>
 </div>
 <script type="module" src="script.js"></script>
 </body>
