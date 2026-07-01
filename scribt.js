@@ -1,104 +1,50 @@
-let count = 0;
-
-
-setInterval(()=>{
-
-count++;
-
-document.getElementById("counter").innerText=count;
-
-
-},1000);
-
-
-
-function signGuestbook(){
-
-let value=document.getElementById("gb").value;
-
-alert("Signed: "+value);
-
-
-}
-
 import { auth } from "./firebase.js";
 
-
 import {
-
 createUserWithEmailAndPassword,
-
 signInWithEmailAndPassword
-
-
-} from 
-
+}
+from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 
 
-
-
-let usernameInput =
-document.getElementById("username");
-
-
-let passwordInput =
-document.getElementById("password");
+alert("script läuft");
 
 
 
-
-
-document.getElementById("register").onclick = ()=>{
-
-
-let username = usernameInput.value;
-
-
-let password = passwordInput.value;
+const username = document.getElementById("username");
+const password = document.getElementById("password");
 
 
 
-if(username.length < 3){
+document.getElementById("register").onclick = function(){
 
-alert("Username too short");
 
-return;
+let user = username.value;
+let pass = password.value;
 
-}
 
+console.log("Register gedrückt");
 
 
 createUserWithEmailAndPassword(
-
 auth,
-
-username+"@imaginace.fake",
-
-password
-
-
+user + "@imaginace.fake",
+pass
 )
-
 
 .then(()=>{
 
-
-alert("Account created");
-
+console.log("Account erstellt");
 
 showWebsite();
 
-
 })
 
+.catch((error)=>{
 
-.catch(e=>{
-
-
-alert(e.message);
-
+alert(error.message);
 
 });
 
@@ -110,32 +56,30 @@ alert(e.message);
 
 
 
-
-document.getElementById("login").onclick = ()=>{
-
-
-let username=usernameInput.value;
+document.getElementById("login").onclick = function(){
 
 
-let password=passwordInput.value;
+let user = username.value;
+let pass = password.value;
 
 
+console.log("Login gedrückt");
 
 
 signInWithEmailAndPassword(
 
 auth,
 
-username+"@imaginace.fake",
+user + "@imaginace.fake",
 
-password
-
+pass
 
 )
 
-
 .then(()=>{
 
+
+console.log("Login erfolgreich");
 
 showWebsite();
 
@@ -143,10 +87,10 @@ showWebsite();
 })
 
 
-.catch(()=>{
+.catch((error)=>{
 
 
-alert("wrong login");
+alert("Login Fehler: " + error.message);
 
 
 });
