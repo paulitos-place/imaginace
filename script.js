@@ -322,5 +322,3 @@ function renderMessages(scrollToBottom) {
 function scrollChatToBottom() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
-
-
