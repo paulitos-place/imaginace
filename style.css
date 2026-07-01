@@ -1,8 +1,7 @@
 body {
 margin:0;
 font-family:Bahnschrift, Arial, sans-serif;
-background:
-url("https://i.imgflip.com/12ze8h.jpg");
+background-image: url("https://i.imgflip.com/12ze8h.jpg");
 background-size:cover;
 background-attachment:fixed;
 color:white;
