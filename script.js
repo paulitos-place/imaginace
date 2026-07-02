@@ -65,6 +65,10 @@ let currentUid = null;
 let currentUserColor = "#8cff8c";
 let profileReady = false;
 
+// NEU: verhindert die Race Condition beim Login
+let pendingColorUpdate = null; // Farbe, die beim naechsten Login geschrieben werden soll
+let authGeneration = 0;        // schuetzt vor veralteten, ueberlappenden Auth-Callbacks
+
 function showWebsite() {
   loginScreen.style.display = "none";
   website.style.display = "block";
@@ -117,6 +121,8 @@ registerBtn.addEventListener("click", () => {
     });
 });
 
+// GEAENDERT: Farbe wird hier nur vorgemerkt (pendingColorUpdate),
+// NICHT mehr direkt geschrieben. Das verhindert den Race mit onAuthStateChanged.
 loginBtn.addEventListener("click", () => {
   const username = usernameInput.value.trim();
   const password = passwordInput.value;
@@ -124,12 +130,11 @@ loginBtn.addEventListener("click", () => {
 
   if (!validInput(username, password)) return;
 
+  pendingColorUpdate = selectedColor;
+
   signInWithEmailAndPassword(auth, usernameToEmail(username), password)
-    .then(async (userCredential) => {
-      await setDoc(doc(db, "users", userCredential.user.uid), { color: selectedColor }, { merge: true });
-      loginMessage.textContent = "";
-    })
     .catch((error) => {
+      pendingColorUpdate = null;
       loginMessage.textContent = "Fehler beim Login: " + error.message;
     });
 });
@@ -142,14 +147,28 @@ if (logoutBtn) {
   });
 }
 
+// GEAENDERT: kompletter Block ersetzt.
+// - Farbe wird jetzt SEQUENZIELL vor dem Profil-Lesen geschrieben (kein Race mehr)
+// - authGeneration verhindert, dass ein alter/langsamer Callback neuere Daten ueberschreibt
+// - resetChat() + initChat() sorgen dafuer, dass der Chat-Listener bei jedem Login sauber neu startet
 onAuthStateChanged(auth, async (user) => {
+  const myGeneration = ++authGeneration;
+
   if (user) {
     currentUid = user.uid;
     profileReady = false;
-    setChatInputState(false); // NEU: Chat sperren, während Profil lädt
+    setChatInputState(false);
 
     try {
+      if (pendingColorUpdate) {
+        await setDoc(doc(db, "users", user.uid), { color: pendingColorUpdate }, { merge: true });
+        pendingColorUpdate = null;
+      }
+
       const profileSnap = await getDoc(doc(db, "users", user.uid));
+
+      if (myGeneration !== authGeneration) return; // veralteter Callback -> abbrechen
+
       if (profileSnap.exists()) {
         const data = profileSnap.data();
         currentUsername = data.username;
@@ -159,20 +178,25 @@ onAuthStateChanged(auth, async (user) => {
         currentUserColor = "#8cff8c";
       }
     } catch (e) {
+      if (myGeneration !== authGeneration) return;
       currentUsername = user.email.split("@")[0];
       currentUserColor = "#8cff8c";
     }
 
+    if (myGeneration !== authGeneration) return;
+
     profileReady = true;
-    setChatInputState(true); // NEU: Chat wieder freigeben
+    setChatInputState(true);
 
     showWebsite();
+    resetChat();
     initChat();
   } else {
     currentUid = null;
     currentUsername = null;
     profileReady = false;
-    setChatInputState(false); // NEU: Chat sperren nach Logout
+    setChatInputState(false);
+    resetChat();
     showLogin();
   }
 });
@@ -192,7 +216,7 @@ if (blockBtn) blockBtn.addEventListener("click", () => alert("Blocked!"));
 if (gbSubmit) {
   gbSubmit.addEventListener("click", () => {
     if (gbInput.value.trim() === "") return;
-    alert("Danke fürs Unterschreiben: " + gbInput.value);
+    alert("Danke fuers Unterschreiben: " + gbInput.value);
     gbInput.value = "";
   });
 }
@@ -221,13 +245,12 @@ let isLoadingOlder = false;
 let firstSnapshotHandled = false;
 let isChatOpen = false;
 
-// NEU: sperrt/entsperrt Eingabefeld + Sendebutton je nach Profilstatus
 function setChatInputState(enabled) {
   chatInput.disabled = !enabled;
   chatSend.disabled = !enabled;
   chatInput.placeholder = enabled ? "Nachricht..." : "Profil wird geladen...";
 }
-setChatInputState(false); // Start: gesperrt, bis Login abgeschlossen ist
+setChatInputState(false);
 
 function showChatBadge() {
   chatBadge.classList.remove("hidden");
@@ -254,7 +277,7 @@ chatInput.addEventListener("input", () => {
 });
 
 function sendChatMessage() {
-  if (!profileReady || !currentUsername || !currentUid) return; // NEU: harte Absicherung
+  if (!profileReady || !currentUsername || !currentUid) return;
 
   const text = chatInput.value.trim();
   if (text === "" || text.length > 100) return;
@@ -277,6 +300,21 @@ chatSend.addEventListener("click", sendChatMessage);
 chatInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") sendChatMessage();
 });
+
+// NEU: setzt den Chat-Status zurueck, damit initChat() beim naechsten Login
+// wirklich neu aufgebaut wird (verhindert toten Listener nach Logout)
+function resetChat() {
+  if (unsubscribeChat) {
+    unsubscribeChat();
+    unsubscribeChat = null;
+  }
+  chatInitialized = false;
+  recentMessages = [];
+  olderMessages = [];
+  paginationCursor = null;
+  hasMoreOlder = true;
+  firstSnapshotHandled = false;
+}
 
 function initChat() {
   if (chatInitialized) return;
@@ -349,7 +387,7 @@ async function loadOlderMessages() {
 
     renderMessages(false);
   } catch (e) {
-    console.error("Fehler beim Laden älterer Nachrichten:", e);
+    console.error("Fehler beim Laden aelterer Nachrichten:", e);
   } finally {
     isLoadingOlder = false;
     chatLoadingOlder.classList.add("hidden");
