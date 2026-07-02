@@ -2,6 +2,7 @@ import { auth, db } from './firebase.js';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
@@ -48,7 +49,7 @@ function renderColorPicker() {
 }
 renderColorPicker();
 
-// ---------- LOGIN / REGISTER ----------
+// ---------- LOGIN / REGISTER / LOGOUT ----------
 
 const loginScreen = document.getElementById("loginScreen");
 const website = document.getElementById("website");
@@ -57,6 +58,7 @@ const passwordInput = document.getElementById("password");
 const loginMessage = document.getElementById("loginMessage");
 const registerBtn = document.getElementById("register");
 const loginBtn = document.getElementById("login");
+const logoutBtn = document.getElementById("logoutBtn");
 
 let currentUsername = null;
 let currentUid = null;
@@ -102,7 +104,6 @@ registerBtn.addEventListener("click", () => {
   createUserWithEmailAndPassword(auth, usernameToEmail(username), password)
     .then(async (userCredential) => {
       const uid = userCredential.user.uid;
-      // Username dauerhaft speichern - wird danach NIE wieder verändert
       await setDoc(doc(db, "users", uid), {
         username: username,
         color: selectedColor,
@@ -124,7 +125,6 @@ loginBtn.addEventListener("click", () => {
 
   signInWithEmailAndPassword(auth, usernameToEmail(username), password)
     .then(async (userCredential) => {
-      // Farbe darf jederzeit beim Login aktualisiert werden, Username bleibt unangetastet
       await setDoc(doc(db, "users", userCredential.user.uid), { color: selectedColor }, { merge: true });
       loginMessage.textContent = "";
     })
@@ -132,6 +132,14 @@ loginBtn.addEventListener("click", () => {
       loginMessage.textContent = "Fehler beim Login: " + error.message;
     });
 });
+
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    signOut(auth).catch((error) => {
+      alert("Fehler beim Logout: " + error.message);
+    });
+  });
+}
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -271,7 +279,6 @@ function initChat() {
       }
       hasMoreOlder = docsDesc.length === PAGE_SIZE;
     } else {
-      // Prüfen ob wirklich neue Nachrichten reingekommen sind (nicht der Erstladevorgang)
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           const data = change.doc.data();
