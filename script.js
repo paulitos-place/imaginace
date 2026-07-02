@@ -21,6 +21,33 @@ import {
 
 console.log("SCRIPT GELADEN");
 
+// ---------- FARBAUSWAHL (Login-Screen) ----------
+
+const CHAT_COLORS = [
+  "#ff6b6b", "#6fb8ff", "#8cff8c", "#ffcc66",
+  "#ff8cff", "#66ffff", "#ffa500", "#c299ff"
+];
+
+let selectedColor = CHAT_COLORS[Math.floor(Math.random() * CHAT_COLORS.length)];
+
+const colorPicker = document.getElementById("colorPicker");
+
+function renderColorPicker() {
+  colorPicker.innerHTML = "";
+  CHAT_COLORS.forEach((color) => {
+    const swatch = document.createElement("div");
+    swatch.className = "colorSwatch" + (color === selectedColor ? " selected" : "");
+    swatch.style.background = color;
+    swatch.title = color;
+    swatch.addEventListener("click", () => {
+      selectedColor = color;
+      renderColorPicker();
+    });
+    colorPicker.appendChild(swatch);
+  });
+}
+renderColorPicker();
+
 // ---------- LOGIN / REGISTER ----------
 
 const loginScreen = document.getElementById("loginScreen");
@@ -33,6 +60,7 @@ const loginBtn = document.getElementById("login");
 
 let currentUsername = null;
 let currentUid = null;
+let currentUserColor = "#8cff8c";
 
 function showWebsite() {
   loginScreen.style.display = "none";
@@ -77,6 +105,7 @@ registerBtn.addEventListener("click", () => {
       // Username dauerhaft speichern - wird danach NIE wieder verändert
       await setDoc(doc(db, "users", uid), {
         username: username,
+        color: selectedColor,
         createdAt: serverTimestamp()
       });
       loginMessage.textContent = "Registrierung erfolgreich!";
@@ -94,7 +123,9 @@ loginBtn.addEventListener("click", () => {
   if (!validInput(username, password)) return;
 
   signInWithEmailAndPassword(auth, usernameToEmail(username), password)
-    .then(() => {
+    .then(async (userCredential) => {
+      // Farbe darf jederzeit beim Login aktualisiert werden, Username bleibt unangetastet
+      await setDoc(doc(db, "users", userCredential.user.uid), { color: selectedColor }, { merge: true });
       loginMessage.textContent = "";
     })
     .catch((error) => {
@@ -108,13 +139,16 @@ onAuthStateChanged(auth, async (user) => {
     try {
       const profileSnap = await getDoc(doc(db, "users", user.uid));
       if (profileSnap.exists()) {
-        currentUsername = profileSnap.data().username;
+        const data = profileSnap.data();
+        currentUsername = data.username;
+        currentUserColor = data.color || "#8cff8c";
       } else {
-        // Fallback für ältere Accounts ohne Profil-Dokument
         currentUsername = user.email.split("@")[0];
+        currentUserColor = "#8cff8c";
       }
     } catch (e) {
       currentUsername = user.email.split("@")[0];
+      currentUserColor = "#8cff8c";
     }
     showWebsite();
     initChat();
@@ -155,25 +189,38 @@ const chatLoadingOlder = document.getElementById("chatLoadingOlder");
 const chatInput = document.getElementById("chatInput");
 const chatSend = document.getElementById("chatSend");
 const chatCharCount = document.getElementById("chatCharCount");
+const chatBadge = document.getElementById("chatBadge");
 
 const PAGE_SIZE = 20;
 
 let chatInitialized = false;
 let unsubscribeChat = null;
-let recentMessages = [];   // aktuelle "Live"-Nachrichten (aufsteigend sortiert)
-let olderMessages = [];    // per Pagination nachgeladene ältere Nachrichten (aufsteigend)
-let paginationCursor = null; // Firestore-DocumentSnapshot als Ladepunkt für "älter"
+let recentMessages = [];
+let olderMessages = [];
+let paginationCursor = null;
 let hasMoreOlder = true;
 let isLoadingOlder = false;
 let firstSnapshotHandled = false;
+let isChatOpen = false;
+
+function showChatBadge() {
+  chatBadge.classList.remove("hidden");
+}
+
+function hideChatBadge() {
+  chatBadge.classList.add("hidden");
+}
 
 chatToggle.addEventListener("click", () => {
   chatPopup.classList.remove("hidden");
+  isChatOpen = true;
+  hideChatBadge();
   scrollChatToBottom();
 });
 
 chatClose.addEventListener("click", () => {
   chatPopup.classList.add("hidden");
+  isChatOpen = false;
 });
 
 chatInput.addEventListener("input", () => {
@@ -187,6 +234,7 @@ function sendChatMessage() {
   addDoc(collection(db, "messages"), {
     text: text,
     username: currentUsername,
+    color: currentUserColor,
     uid: currentUid,
     timestamp: serverTimestamp()
   }).then(() => {
@@ -210,7 +258,7 @@ function initChat() {
   const recentQuery = query(messagesRef, orderBy("timestamp", "desc"), limit(PAGE_SIZE));
 
   unsubscribeChat = onSnapshot(recentQuery, (snapshot) => {
-    const docsDesc = snapshot.docs; // neueste zuerst
+    const docsDesc = snapshot.docs;
     recentMessages = docsDesc
       .slice()
       .reverse()
@@ -222,6 +270,16 @@ function initChat() {
         paginationCursor = docsDesc[docsDesc.length - 1];
       }
       hasMoreOlder = docsDesc.length === PAGE_SIZE;
+    } else {
+      // Prüfen ob wirklich neue Nachrichten reingekommen sind (nicht der Erstladevorgang)
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          const data = change.doc.data();
+          if (data.uid !== currentUid && !isChatOpen) {
+            showChatBadge();
+          }
+        }
+      });
     }
 
     renderMessages(true);
@@ -299,6 +357,7 @@ function renderMessages(scrollToBottom) {
     const userSpan = document.createElement("span");
     userSpan.className = "chat-user";
     userSpan.textContent = (msg.username || "???") + ":";
+    userSpan.style.color = msg.color || "#8cff8c";
     const timeSpan = document.createElement("span");
     timeSpan.className = "chat-time";
     timeSpan.textContent = formatTime(msg.timestamp);
@@ -313,7 +372,6 @@ function renderMessages(scrollToBottom) {
   if (scrollToBottom && wasNearBottom) {
     scrollChatToBottom();
   } else if (!scrollToBottom) {
-    // Scrollposition beim Nachladen älterer Nachrichten stabil halten
     const newScrollHeight = chatMessages.scrollHeight;
     chatMessages.scrollTop = newScrollHeight - prevScrollHeight + prevScrollTop;
   }
