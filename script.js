@@ -63,6 +63,7 @@ const logoutBtn = document.getElementById("logoutBtn");
 let currentUsername = null;
 let currentUid = null;
 let currentUserColor = "#8cff8c";
+let profileReady = false; // NEU: zeigt an, ob Username/Farbe fertig geladen sind
 
 function showWebsite() {
   loginScreen.style.display = "none";
@@ -144,6 +145,7 @@ if (logoutBtn) {
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUid = user.uid;
+    profileReady = false; // NEU: solange Profil lädt, ist es nicht bereit
     try {
       const profileSnap = await getDoc(doc(db, "users", user.uid));
       if (profileSnap.exists()) {
@@ -158,11 +160,13 @@ onAuthStateChanged(auth, async (user) => {
       currentUsername = user.email.split("@")[0];
       currentUserColor = "#8cff8c";
     }
+    profileReady = true; // NEU: jetzt erst darf gesendet werden
     showWebsite();
     initChat();
   } else {
     currentUid = null;
     currentUsername = null;
+    profileReady = false;
     showLogin();
   }
 });
@@ -238,6 +242,12 @@ chatInput.addEventListener("input", () => {
 function sendChatMessage() {
   const text = chatInput.value.trim();
   if (text === "" || text.length > 100 || !currentUid) return;
+
+  // NEU: verhindert das "undefined username"-Problem bei zu früh gesendeten Nachrichten
+  if (!profileReady || !currentUsername) {
+    alert("Dein Profil wird noch geladen, bitte kurz warten und erneut senden.");
+    return;
+  }
 
   addDoc(collection(db, "messages"), {
     text: text,
