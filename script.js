@@ -66,7 +66,7 @@ let currentUserColor = "#8cff8c";
 let profileReady = false;
 
 // NEU: verhindert die Race Condition beim Login
-let pendingColorUpdate = null; // Farbe, die beim naechsten Login geschrieben werden soll
+let pendingColorUpdate = null; // Farbe, diie beim naechsten Login geschrieben werden soll
 let authGeneration = 0;        // schuetzt vor veralteten, ueberlappenden Auth-Callbacks
 
 function showWebsite() {
