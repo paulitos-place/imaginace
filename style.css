@@ -17,6 +17,17 @@ justify-content:center;
 align-items:center;
 position:relative;
 }
+.brandBadge {
+position:absolute;
+left:20px;
+background:#3a4a63;
+color:white;
+font-family:"High Tower Text", Georgia, "Times New Roman", serif;
+font-size:14px;
+font-weight:normal;
+padding:6px 12px;
+border:1px solid black;
+}
 #logoutBtn {
 position:absolute;
 right:20px;
@@ -41,18 +52,29 @@ width:270px;
 .right {
 width:520px;
 }
-/* normale Myspace Boxen */
+/* normale Myspace Boxen - transparent, nur Rand */
 .box {
-background:rgba(25,25,35,0.75);
+background:transparent;
+border:2px solid black;
+padding:12px;
+margin-bottom:18px;
+}
+/* Musik-Box - eigene Klasse mit festem grauem Hintergrund */
+.musicBox {
+background:#555555;
 border:1px solid rgba(255,255,255,.7);
 padding:12px;
 margin-bottom:18px;
 }
-.profile img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
+.profile {
+border:1px solid black;
+padding:12px;
+text-align:left;
 }
+.profile img {
+width:200px;
+height:200px;
+object-fit:cover;
 }
 .pfp {
 width:150px;
@@ -63,7 +85,7 @@ border:2px solid #65ff65;
 h1 {
 font-size:38px;
 margin:5px;
-color:#8cff8c;
+color:white;
 font-weight:bold;
 }
 h2 {
@@ -119,6 +141,15 @@ font-size:14px;
 text-align:center;
 background:rgba(0,0,0,.7);
 padding:10px;
+}
+/* Audio-Player: passt in die Box, wirkt eckiger/älter */
+audio {
+width:100%;
+box-sizing:border-box;
+border-radius:0;
+}
+audio::-webkit-media-controls-panel {
+border-radius:0;
 }
 #loginScreen {
 position:fixed;
@@ -180,7 +211,7 @@ box-shadow:0 0 5px 2px rgba(255,255,255,0.7);
 #website {
 display:none;
 }
-/* CHAT WIDGET */
+/* CHAT WIDGET - unangetastet */
 .hidden {
 display:none !important;
 }
