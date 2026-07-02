@@ -48,10 +48,11 @@ border:1px solid rgba(255,255,255,.7);
 padding:12px;
 margin-bottom:18px;
 }
-.profile {
-border:1px solid black;
-padding:12px;
-text-align:left;
+.profile img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
 }
 .pfp {
 width:150px;
