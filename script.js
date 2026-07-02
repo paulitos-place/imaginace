@@ -445,3 +445,17 @@ function renderMessages(scrollToBottom) {
 function scrollChatToBottom() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+
+// TEMP DEBUG - kann spaeter wieder entfernt werden
+window.debugChat = () => {
+  console.log({
+    profileReady,
+    currentUid,
+    currentUsername,
+    currentUserColor,
+    chatInputDisabled: chatInput.disabled,
+    chatSendDisabled: chatSend.disabled,
+    chatInitialized,
+    pendingColorUpdate
+  });
+};
