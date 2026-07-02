@@ -63,7 +63,7 @@ const logoutBtn = document.getElementById("logoutBtn");
 let currentUsername = null;
 let currentUid = null;
 let currentUserColor = "#8cff8c";
-let profileReady = false; // NEU: zeigt an, ob Username/Farbe fertig geladen sind
+let profileReady = false;
 
 function showWebsite() {
   loginScreen.style.display = "none";
@@ -145,7 +145,9 @@ if (logoutBtn) {
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUid = user.uid;
-    profileReady = false; // NEU: solange Profil lädt, ist es nicht bereit
+    profileReady = false;
+    setChatInputState(false); // NEU: Chat sperren, während Profil lädt
+
     try {
       const profileSnap = await getDoc(doc(db, "users", user.uid));
       if (profileSnap.exists()) {
@@ -160,13 +162,17 @@ onAuthStateChanged(auth, async (user) => {
       currentUsername = user.email.split("@")[0];
       currentUserColor = "#8cff8c";
     }
-    profileReady = true; // NEU: jetzt erst darf gesendet werden
+
+    profileReady = true;
+    setChatInputState(true); // NEU: Chat wieder freigeben
+
     showWebsite();
     initChat();
   } else {
     currentUid = null;
     currentUsername = null;
     profileReady = false;
+    setChatInputState(false); // NEU: Chat sperren nach Logout
     showLogin();
   }
 });
@@ -215,6 +221,14 @@ let isLoadingOlder = false;
 let firstSnapshotHandled = false;
 let isChatOpen = false;
 
+// NEU: sperrt/entsperrt Eingabefeld + Sendebutton je nach Profilstatus
+function setChatInputState(enabled) {
+  chatInput.disabled = !enabled;
+  chatSend.disabled = !enabled;
+  chatInput.placeholder = enabled ? "Nachricht..." : "Profil wird geladen...";
+}
+setChatInputState(false); // Start: gesperrt, bis Login abgeschlossen ist
+
 function showChatBadge() {
   chatBadge.classList.remove("hidden");
 }
@@ -240,14 +254,10 @@ chatInput.addEventListener("input", () => {
 });
 
 function sendChatMessage() {
-  const text = chatInput.value.trim();
-  if (text === "" || text.length > 100 || !currentUid) return;
+  if (!profileReady || !currentUsername || !currentUid) return; // NEU: harte Absicherung
 
-  // NEU: verhindert das "undefined username"-Problem bei zu früh gesendeten Nachrichten
-  if (!profileReady || !currentUsername) {
-    alert("Dein Profil wird noch geladen, bitte kurz warten und erneut senden.");
-    return;
-  }
+  const text = chatInput.value.trim();
+  if (text === "" || text.length > 100) return;
 
   addDoc(collection(db, "messages"), {
     text: text,
