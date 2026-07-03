@@ -1,10 +1,10 @@
 body {
 margin:0;
 font-family:Bahnschrift, Arial, sans-serif;
-background-image: url("https://i.imgflip.com/12ze8h.jpg");
+background-image: url("https://warfarehistorynetwork.com/wp-content/uploads/2016/02/Fateful-Decision-Featured-5.jpg");
 background-size:cover;
 background-attachment:fixed;
-color:black;
+color:white;
 }
 .topbar {
 background:rgba(20,20,20,0.75);
@@ -103,7 +103,27 @@ background:transparent;
 border:2px solid black;
 padding:12px;
 margin-bottom:18px;
-color:black;
+color:white;
+}
+/* imaginance blurbs Kopfzeile - eigene Box mit Farbe */
+.blurbsHeader {
+background:#c17a4a;
+border:2px solid black;
+padding:6px 12px;
+margin-bottom:6px;
+}
+.blurbsHeader h2 {
+color:#7a2e2e;
+margin:0;
+}
+/* Blurbs-Textbox - kompakter in der Hoehe */
+.blurbsContent {
+padding:8px 12px;
+margin-top:0;
+}
+.blurbsContent p {
+margin:0;
+line-height:1.3;
 }
 /* Musik-Box - eigene Klasse mit festem grauem Hintergrund */
 .musicBox {
@@ -111,13 +131,13 @@ background:#555555;
 border:1px solid rgba(255,255,255,.7);
 padding:12px;
 margin-bottom:18px;
-color:black;
+color:white;
 }
 .profile {
 border:1px solid black;
 padding:12px;
 text-align:left;
-color:black;
+color:white;
 }
 .profile img {
 width:200px;
@@ -133,25 +153,25 @@ border:2px solid #65ff65;
 h1 {
 font-size:38px;
 margin:5px;
-color:black;
+color:white;
 font-weight:bold;
 }
 h2 {
 font-size:20px;
 font-weight:bold;
 text-decoration:none;
-color:black;
+color:white;
 }
 .meta {
 font-size:14px;
-color:black;
+color:white;
 }
 /* einzelne Texte ohne Box */
 .plain {
 padding:10px;
 font-size:18px;
 line-height:1.4;
-color:black;
+color:white;
 }
 /* bewusst farbige Akzent-Wörter - bleiben bunt */
 .highlight {
@@ -189,7 +209,7 @@ color:black;
 border-top:1px solid gray;
 padding:8px;
 font-size:14px;
-color:black;
+color:white;
 }
 .footer {
 text-align:center;
@@ -206,30 +226,50 @@ border-radius:0;
 audio::-webkit-media-controls-panel {
 border-radius:0;
 }
+/* ---------- LOGIN SCREEN ---------- */
 #loginScreen {
 position:fixed;
 top:0;
 left:0;
 width:100%;
 height:100%;
-background:#111;
+background:white;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 z-index:99999;
 font-family:Bahnschrift;
-color:white;
 }
-#loginScreen h2 {
-font-weight:bold;
+.loginBadge {
+background:#2c3e63;
+padding:6px 16px;
+margin:4px 0;
+}
+.loginBadge.small {
+padding:4px 12px;
+}
+.loginBadge h2 {
 color:white;
+margin:0;
+font-weight:bold;
+}
+.loginBadge .colorLabel {
+color:white;
+margin:0;
+font-size:14px;
 }
 #loginScreen input {
 padding:8px;
 margin:5px;
 font-family:Bahnschrift;
 z-index:100000;
+background:#aee0f5;
+border:1px solid #2c3e63;
+color:white;
+}
+#loginScreen input::placeholder {
+color:rgba(255,255,255,0.85);
 }
 #loginScreen button {
 background:#b5a642;
@@ -240,11 +280,6 @@ font-family:Bahnschrift;
 cursor:pointer;
 z-index:100000;
 color:black;
-}
-.colorLabel {
-font-size:14px;
-color:white;
-margin:5px 0 0 0;
 }
 #colorPicker {
 display:flex;
@@ -257,14 +292,14 @@ max-width:260px;
 .colorSwatch {
 width:28px;
 height:28px;
-border-radius:50%;
-border:2px solid transparent;
+border-radius:0;
+border:1px solid black;
 cursor:pointer;
 box-sizing:border-box;
 }
 .colorSwatch.selected {
-border-color:white;
-box-shadow:0 0 5px 2px rgba(255,255,255,0.7);
+border:1px solid #2c6fdb;
+box-shadow:0 0 3px 1px rgba(44,111,219,0.6);
 }
 #website {
 display:none;
