@@ -1,336 +1,32 @@
-body {
-margin:0;
-font-family:Bahnschrift, Arial, sans-serif;
-background-image: url("https://warfarehistorynetwork.com/wp-content/uploads/2016/02/Fateful-Decision-Featured-5.jpg");
-background-size:cover;
-background-attachment:fixed;
+/* --- LOGIN TOP BARS (neu) --- */
+.loginTopBar {
+background:#4169e1;
 color:white;
-}
-.topbar {
-background:rgba(20,20,20,0.75);
-padding:12px;
-text-align:center;
-font-size:22px;
 font-weight:bold;
-display:flex;
-justify-content:center;
-align-items:center;
-position:relative;
-color:white;
-}
-.brandBadge {
-position:absolute;
-left:20px;
-background:#3a4a63;
-color:white;
-font-family:"High Tower Text", Georgia, "Times New Roman", serif;
-font-size:14px;
-font-weight:normal;
-padding:6px 12px;
-border:1px solid black;
-}
-.topbarRight {
-position:absolute;
-right:20px;
-display:flex;
-gap:8px;
-}
-#logoutBtn, #changePasswordBtn {
-font-size:14px;
-font-weight:normal;
-background:#b5a642;
-border:1px solid black;
-padding:6px 12px;
-cursor:pointer;
-font-family:Bahnschrift;
-color:black;
-}
-#changePasswordBox {
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:99998;
-}
-.cpInner {
-background:#1a1a1a;
-border:2px solid #b5a642;
-padding:20px;
-display:flex;
-flex-direction:column;
-gap:8px;
-width:280px;
-}
-.cpInner h3 {
-color:white;
-margin:0 0 8px 0;
-}
-.cpInner input {
-padding:8px;
-font-family:Bahnschrift;
-}
-.cpInner button {
-padding:8px;
-font-family:Bahnschrift;
-cursor:pointer;
-}
-#changePasswordMessage {
-color:#ffcc66;
-font-size:13px;
-margin:4px 0 0 0;
-}
-/* Hauptaufteilung wie Screenshot */
-.layout {
-display:flex;
-justify-content:center;
-gap:25px;
-padding:30px;
-}
-.left {
-width:270px;
-}
-.right {
-width:520px;
-}
-/* normale Myspace Boxen - transparent, nur Rand */
-.box {
-background:transparent;
-border:2px solid black;
-padding:12px;
-margin-bottom:18px;
-color:white;
-}
-/* imaginance blurbs Kopfzeile - eigene Box mit Farbe */
-.blurbsHeader {
-background:#c17a4a;
-border:2px solid black;
-padding:6px 12px;
-margin-bottom:6px;
-}
-.blurbsHeader h2 {
-color:#7a2e2e;
-margin:0;
-}
-/* Blurbs-Textbox - kompakter in der Hoehe */
-.blurbsContent {
-padding:8px 12px;
-margin-top:0;
-}
-.blurbsContent p {
-margin:0;
-line-height:1.3;
-}
-/* Musik-Box - eigene Klasse mit festem grauem Hintergrund */
-.musicBox {
-background:#555555;
-border:1px solid rgba(255,255,255,.7);
-padding:12px;
-margin-bottom:18px;
-color:white;
-}
-.profile {
-border:1px solid black;
-padding:12px;
+font-size:16px;
 text-align:left;
-color:white;
-}
-.profile img {
-width:200px;
-height:200px;
-object-fit:cover;
-}
-.pfp {
-width:150px;
-height:150px;
-object-fit:cover;
-border:2px solid #65ff65;
-}
-h1 {
-font-size:38px;
-margin:5px;
-color:white;
-font-weight:bold;
-}
-h2 {
-font-size:20px;
-font-weight:bold;
-text-decoration:none;
-color:white;
-}
-.meta {
-font-size:14px;
-color:white;
-}
-/* einzelne Texte ohne Box */
-.plain {
-padding:10px;
-font-size:18px;
-line-height:1.4;
-color:white;
-}
-/* bewusst farbige Akzent-Wörter - bleiben bunt */
-.highlight {
-color:#ffcc66;
-}
-.blue {
-color:#6fb8ff;
-}
-.red {
-color:#ff6b6b;
-}
-/* etwas wie die Screenshots */
-.blog {
-background:none;
-border:none;
-}
-.chaos {
-background:rgba(0,0,0,.35);
-border:none;
-font-size:22px;
-padding:20px;
-margin-top:20px;
-color:white;
-}
-/* Buttons */
-button {
-font-family:Bahnschrift;
-background:#b5a642;
-border:1px solid black;
-padding:4px;
-color:black;
-}
-/* Kommentare */
-.comment {
-border-top:1px solid gray;
-padding:8px;
-font-size:14px;
-color:white;
-}
-.footer {
-text-align:center;
-background:rgba(0,0,0,.7);
-padding:10px;
-color:white;
-}
-/* Audio-Player: passt in die Box, wirkt eckiger/älter */
-audio {
+padding:14px 20px;
 width:100%;
 box-sizing:border-box;
-border-radius:0;
 }
-audio::-webkit-media-controls-panel {
-border-radius:0;
-}
-/* ---------- LOGIN SCREEN ---------- */
-#loginScreen {
-position:fixed;
-top:0;
-left:0;
+.loginBar {
+background:#aee0f5;
+color:#1a1a1a;
+font-weight:bold;
+font-size:15px;
+text-align:left;
+padding:8px 20px;
 width:100%;
-height:100%;
-background:white;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:99999;
-font-family:Bahnschrift;
+box-sizing:border-box;
+margin-bottom:10px;
 }
 .loginBadge {
-background:#2c3e63;
+background:#4169e1; /* Königsblau statt Dunkelblau */
 padding:6px 16px;
 margin:4px 0;
 }
-.loginBadge.small {
-padding:4px 12px;
-}
-.loginBadge h2 {
-color:white;
-margin:0;
-font-weight:bold;
-}
-.loginBadge .colorLabel {
-color:white;
-margin:0;
-font-size:14px;
-}
-#loginScreen input {
-padding:8px;
-margin:5px;
-font-family:Bahnschrift;
-z-index:100000;
-background:#aee0f5;
-border:1px solid #2c3e63;
-color:white;
-}
-#loginScreen input::placeholder {
-color:rgba(255,255,255,0.85);
-}
-#loginScreen button {
-background:#b5a642;
-border:1px solid black;
-padding:8px 20px;
-margin:5px;
-font-family:Bahnschrift;
-cursor:pointer;
-z-index:100000;
-color:black;
-}
-#colorPicker {
-display:flex;
-gap:10px;
-margin:8px 0;
-flex-wrap:wrap;
-justify-content:center;
-max-width:260px;
-}
-.colorSwatch {
-width:28px;
-height:28px;
-border-radius:0;
-border:1px solid black;
-cursor:pointer;
-box-sizing:border-box;
-}
-.colorSwatch.selected {
-border:1px solid #2c6fdb;
-box-shadow:0 0 3px 1px rgba(44,111,219,0.6);
-}
-#website {
-display:none;
-}
-/* CHAT WIDGET - unangetastet */
-.hidden {
-display:none !important;
-}
-#chatToggle {
-position:fixed;
-bottom:20px;
-right:20px;
-background:#ff0000;
-color:black;
-padding:12px 18px;
-border:2px solid black;
-font-weight:bold;
-cursor:pointer;
-z-index:9000;
-font-family:Bahnschrift;
-}
-.chat-badge {
-position:absolute;
-top:-6px;
-right:-6px;
-width:14px;
-height:14px;
-background:red;
-border-radius:50%;
-border:2px solid black;
-}
+
+/* --- CHAT HINTERGRUND (angepasst) --- */
 #chatPopup {
 position:fixed;
 bottom:20px;
@@ -338,80 +34,40 @@ right:20px;
 width:320px;
 height:420px;
 background-image: url("https://i.pinimg.com/736x/55/52/8f/55528f9f4706fcb4ae5e66e3462b0ee6.jpg");
+background-size:contain;
+background-position:center;
+background-repeat:no-repeat;
+background-color:#111;
 display:flex;
 flex-direction:column;
 z-index:9001;
 font-family:Bahnschrift;
 }
-.chat-header {
-background:#b5a642;
-color:black;
-padding:8px 10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-weight:bold;
-}
-.chat-header button {
-background:none;
+
+/* --- CHAOS BLOCK MIT DINO-BILD (neu) --- */
+.chaos {
+background:rgba(0,0,0,.35);
 border:none;
-color:black;
-font-weight:bold;
-cursor:pointer;
-font-size:16px;
-padding:0 4px;
-}
-.chat-messages {
-flex:1;
-overflow-y:auto;
-padding:8px;
-font-size:13px;
-display:flex;
-flex-direction:column;
-gap:6px;
-}
-.chat-msg {
-background:rgba(200,255,200,0.08);
-padding:6px 8px;
-word-wrap:break-word;
+font-size:22px;
+padding:20px;
+margin-top:20px;
 color:white;
-}
-.chat-msg .chat-user {
-font-weight:bold;
-margin-right:4px;
-}
-.chat-msg .chat-time {
-color:#999;
-font-size:10px;
-float:right;
-}
-.chat-input-row {
 display:flex;
-border-top:1px solid #b5a642;
+align-items:flex-start;
+gap:20px;
 }
-.chat-input-row input {
+.chaosImg {
+width:160px;
+height:160px;
+object-fit:cover;
+flex-shrink:0;
+border:2px solid black;
+}
+.chaosText {
 flex:1;
-padding:8px;
-border:none;
-font-family:Bahnschrift;
-}
-.chat-input-row button {
-background:#b5a642;
-border:none;
-padding:0 14px;
-cursor:pointer;
-font-weight:bold;
-color:black;
-}
-.chat-charcount {
 text-align:right;
-font-size:10px;
-color:#aaa;
-padding:2px 8px;
 }
-.chat-loading {
-text-align:center;
-font-size:11px;
-color:#aaa;
-padding:4px;
+.onlineNow {
+height:16px;
+vertical-align:middle;
 }
