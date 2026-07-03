@@ -4,7 +4,7 @@ font-family:Bahnschrift, Arial, sans-serif;
 background-image: url("https://i.imgflip.com/12ze8h.jpg");
 background-size:cover;
 background-attachment:fixed;
-color:white;
+color:black;
 }
 .topbar {
 background:rgba(20,20,20,0.75);
@@ -16,6 +16,7 @@ display:flex;
 justify-content:center;
 align-items:center;
 position:relative;
+color:white;
 }
 .brandBadge {
 position:absolute;
@@ -28,9 +29,13 @@ font-weight:normal;
 padding:6px 12px;
 border:1px solid black;
 }
-#logoutBtn {
+.topbarRight {
 position:absolute;
 right:20px;
+display:flex;
+gap:8px;
+}
+#logoutBtn, #changePasswordBtn {
 font-size:14px;
 font-weight:normal;
 background:#b5a642;
@@ -38,6 +43,46 @@ border:1px solid black;
 padding:6px 12px;
 cursor:pointer;
 font-family:Bahnschrift;
+color:black;
+}
+#changePasswordBox {
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99998;
+}
+.cpInner {
+background:#1a1a1a;
+border:2px solid #b5a642;
+padding:20px;
+display:flex;
+flex-direction:column;
+gap:8px;
+width:280px;
+}
+.cpInner h3 {
+color:white;
+margin:0 0 8px 0;
+}
+.cpInner input {
+padding:8px;
+font-family:Bahnschrift;
+}
+.cpInner button {
+padding:8px;
+font-family:Bahnschrift;
+cursor:pointer;
+}
+#changePasswordMessage {
+color:#ffcc66;
+font-size:13px;
+margin:4px 0 0 0;
 }
 /* Hauptaufteilung wie Screenshot */
 .layout {
@@ -58,6 +103,7 @@ background:transparent;
 border:2px solid black;
 padding:12px;
 margin-bottom:18px;
+color:black;
 }
 /* Musik-Box - eigene Klasse mit festem grauem Hintergrund */
 .musicBox {
@@ -65,11 +111,13 @@ background:#555555;
 border:1px solid rgba(255,255,255,.7);
 padding:12px;
 margin-bottom:18px;
+color:black;
 }
 .profile {
 border:1px solid black;
 padding:12px;
 text-align:left;
+color:black;
 }
 .profile img {
 width:200px;
@@ -85,24 +133,27 @@ border:2px solid #65ff65;
 h1 {
 font-size:38px;
 margin:5px;
-color:white;
+color:black;
 font-weight:bold;
 }
 h2 {
 font-size:20px;
 font-weight:bold;
 text-decoration:none;
+color:black;
 }
 .meta {
 font-size:14px;
-color:#ddd;
+color:black;
 }
 /* einzelne Texte ohne Box */
 .plain {
 padding:10px;
 font-size:18px;
 line-height:1.4;
+color:black;
 }
+/* bewusst farbige Akzent-Wörter - bleiben bunt */
 .highlight {
 color:#ffcc66;
 }
@@ -123,6 +174,7 @@ border:none;
 font-size:22px;
 padding:20px;
 margin-top:20px;
+color:white;
 }
 /* Buttons */
 button {
@@ -130,17 +182,20 @@ font-family:Bahnschrift;
 background:#b5a642;
 border:1px solid black;
 padding:4px;
+color:black;
 }
 /* Kommentare */
 .comment {
 border-top:1px solid gray;
 padding:8px;
 font-size:14px;
+color:black;
 }
 .footer {
 text-align:center;
 background:rgba(0,0,0,.7);
 padding:10px;
+color:white;
 }
 /* Audio-Player: passt in die Box, wirkt eckiger/älter */
 audio {
@@ -164,9 +219,11 @@ justify-content:center;
 align-items:center;
 z-index:99999;
 font-family:Bahnschrift;
+color:white;
 }
 #loginScreen h2 {
 font-weight:bold;
+color:white;
 }
 #loginScreen input {
 padding:8px;
@@ -182,10 +239,11 @@ margin:5px;
 font-family:Bahnschrift;
 cursor:pointer;
 z-index:100000;
+color:black;
 }
 .colorLabel {
 font-size:14px;
-color:#ddd;
+color:white;
 margin:5px 0 0 0;
 }
 #colorPicker {
@@ -281,6 +339,7 @@ gap:6px;
 background:rgba(200,255,200,0.08);
 padding:6px 8px;
 word-wrap:break-word;
+color:white;
 }
 .chat-msg .chat-user {
 font-weight:bold;
@@ -307,6 +366,7 @@ border:none;
 padding:0 14px;
 cursor:pointer;
 font-weight:bold;
+color:black;
 }
 .chat-charcount {
 text-align:right;

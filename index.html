@@ -28,7 +28,21 @@ Login
   <div class="topbar">
     <div class="brandBadge">IlmvgbLfFGmbH</div>
     <span>imaginace is in your extended network</span>
-    <button id="logoutBtn">Logout</button>
+    <div class="topbarRight">
+      <button id="changePasswordBtn">Passwort ändern</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </div>
+  <!-- PASSWORT ÄNDERN POPUP -->
+  <div id="changePasswordBox" class="hidden">
+    <div class="cpInner">
+      <h3>Passwort ändern</h3>
+      <input id="oldPassword" type="password" placeholder="Aktuelles Passwort">
+      <input id="newPassword" type="password" placeholder="Neues Passwort (min. 6 Zeichen)">
+      <button id="changePasswordSubmit">Ändern</button>
+      <button id="changePasswordCancel">Abbrechen</button>
+      <p id="changePasswordMessage"></p>
+    </div>
   </div>
   <!-- MAIN WRAPPER -->
   <div class="layout">

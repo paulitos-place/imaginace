@@ -3,7 +3,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  updatePassword
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   doc,
@@ -65,9 +68,8 @@ let currentUid = null;
 let currentUserColor = "#8cff8c";
 let profileReady = false;
 
-// NEU: verhindert die Race Condition beim Login
-let pendingColorUpdate = null; // Farbe, diie beim naechsten Login geschrieben werden soll
-let authGeneration = 0;        // schuetzt vor veralteten, ueberlappenden Auth-Callbacks
+let pendingColorUpdate = null;
+let authGeneration = 0;
 
 function showWebsite() {
   loginScreen.style.display = "none";
@@ -121,8 +123,6 @@ registerBtn.addEventListener("click", () => {
     });
 });
 
-// GEAENDERT: Farbe wird hier nur vorgemerkt (pendingColorUpdate),
-// NICHT mehr direkt geschrieben. Das verhindert den Race mit onAuthStateChanged.
 loginBtn.addEventListener("click", () => {
   const username = usernameInput.value.trim();
   const password = passwordInput.value;
@@ -147,10 +147,6 @@ if (logoutBtn) {
   });
 }
 
-// GEAENDERT: kompletter Block ersetzt.
-// - Farbe wird jetzt SEQUENZIELL vor dem Profil-Lesen geschrieben (kein Race mehr)
-// - authGeneration verhindert, dass ein alter/langsamer Callback neuere Daten ueberschreibt
-// - resetChat() + initChat() sorgen dafuer, dass der Chat-Listener bei jedem Login sauber neu startet
 onAuthStateChanged(auth, async (user) => {
   const myGeneration = ++authGeneration;
 
@@ -167,7 +163,7 @@ onAuthStateChanged(auth, async (user) => {
 
       const profileSnap = await getDoc(doc(db, "users", user.uid));
 
-      if (myGeneration !== authGeneration) return; // veralteter Callback -> abbrechen
+      if (myGeneration !== authGeneration) return;
 
       if (profileSnap.exists()) {
         const data = profileSnap.data();
@@ -198,6 +194,63 @@ onAuthStateChanged(auth, async (user) => {
     setChatInputState(false);
     resetChat();
     showLogin();
+  }
+});
+
+// ---------- PASSWORT ÄNDERN ----------
+
+const changePasswordBtn = document.getElementById("changePasswordBtn");
+const changePasswordBox = document.getElementById("changePasswordBox");
+const changePasswordCancel = document.getElementById("changePasswordCancel");
+const changePasswordSubmit = document.getElementById("changePasswordSubmit");
+const changePasswordMessage = document.getElementById("changePasswordMessage");
+const oldPasswordInput = document.getElementById("oldPassword");
+const newPasswordInput = document.getElementById("newPassword");
+
+changePasswordBtn.addEventListener("click", () => {
+  oldPasswordInput.value = "";
+  newPasswordInput.value = "";
+  changePasswordMessage.textContent = "";
+  changePasswordBox.classList.remove("hidden");
+});
+
+changePasswordCancel.addEventListener("click", () => {
+  changePasswordBox.classList.add("hidden");
+});
+
+changePasswordSubmit.addEventListener("click", async () => {
+  const oldPassword = oldPasswordInput.value;
+  const newPassword = newPasswordInput.value;
+  changePasswordMessage.textContent = "";
+
+  if (!oldPassword || !newPassword) {
+    changePasswordMessage.textContent = "Bitte beide Felder ausfüllen.";
+    return;
+  }
+  if (newPassword.length < 6) {
+    changePasswordMessage.textContent = "Neues Passwort muss mindestens 6 Zeichen haben.";
+    return;
+  }
+
+  const user = auth.currentUser;
+  if (!user) {
+    changePasswordMessage.textContent = "Du bist nicht eingeloggt.";
+    return;
+  }
+
+  try {
+    const credential = EmailAuthProvider.credential(user.email, oldPassword);
+    await reauthenticateWithCredential(user, credential);
+    await updatePassword(user, newPassword);
+    changePasswordMessage.textContent = "Passwort erfolgreich geändert!";
+    oldPasswordInput.value = "";
+    newPasswordInput.value = "";
+  } catch (error) {
+    if (error.code === "auth/wrong-password" || error.code === "auth/invalid-credential") {
+      changePasswordMessage.textContent = "Aktuelles Passwort ist falsch.";
+    } else {
+      changePasswordMessage.textContent = "Fehler: " + error.message;
+    }
   }
 });
 
@@ -301,8 +354,6 @@ chatInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") sendChatMessage();
 });
 
-// NEU: setzt den Chat-Status zurueck, damit initChat() beim naechsten Login
-// wirklich neu aufgebaut wird (verhindert toten Listener nach Logout)
 function resetChat() {
   if (unsubscribeChat) {
     unsubscribeChat();
@@ -445,17 +496,3 @@ function renderMessages(scrollToBottom) {
 function scrollChatToBottom() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
-
-// TEMP DEBUG - kann spaeter wieder entfernt werden
-window.debugChat = () => {
-  console.log({
-    profileReady,
-    currentUid,
-    currentUsername,
-    currentUserColor,
-    chatInputDisabled: chatInput.disabled,
-    chatSendDisabled: chatSend.disabled,
-    chatInitialized,
-    pendingColorUpdate
-  });
-};
