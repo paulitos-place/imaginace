@@ -254,6 +254,39 @@ changePasswordSubmit.addEventListener("click", async () => {
   }
 });
 
+// ---------- VIP CODE ----------
+
+const VIP_CODE = "ofwgkta";
+let isVip = localStorage.getItem("imaginace_vip") === "true";
+
+const vipToggle = document.getElementById("vipToggle");
+const vipPopup = document.getElementById("vipPopup");
+const vipCodeInput = document.getElementById("vipCodeInput");
+const vipCodeSubmit = document.getElementById("vipCodeSubmit");
+const vipCodeCancel = document.getElementById("vipCodeCancel");
+const vipCodeMessage = document.getElementById("vipCodeMessage");
+
+vipToggle.addEventListener("click", () => {
+  vipCodeInput.value = "";
+  vipCodeMessage.textContent = isVip ? "Du bist bereits VIP! 👑" : "";
+  vipPopup.classList.remove("hidden");
+});
+
+vipCodeCancel.addEventListener("click", () => {
+  vipPopup.classList.add("hidden");
+});
+
+vipCodeSubmit.addEventListener("click", () => {
+  const val = vipCodeInput.value.trim().toLowerCase();
+  if (val === VIP_CODE) {
+    isVip = true;
+    localStorage.setItem("imaginace_vip", "true");
+    vipCodeMessage.textContent = "Code korrekt! Du bist jetzt VIP 👑";
+  } else {
+    vipCodeMessage.textContent = "Falscher Code.";
+  }
+});
+
 // ---------- SONSTIGE BUTTONS ----------
 
 const sendMessageBtn = document.getElementById("sendMessageBtn");
@@ -340,6 +373,7 @@ function sendChatMessage() {
     username: currentUsername,
     color: currentUserColor,
     uid: currentUid,
+    vip: isVip,
     timestamp: serverTimestamp()
   }).then(() => {
     chatInput.value = "";
@@ -474,12 +508,21 @@ function renderMessages(scrollToBottom) {
     userSpan.className = "chat-user";
     userSpan.textContent = (msg.username || "???") + ":";
     userSpan.style.color = msg.color || "#8cff8c";
+    div.appendChild(userSpan);
+
+    if (msg.vip) {
+      const crown = document.createElement("img");
+      crown.src = "https://i.pinimg.com/originals/05/b9/cc/05b9cc72b0271b8441200e288767850e.jpg";
+      crown.className = "crownIcon";
+      crown.alt = "VIP";
+      div.appendChild(crown);
+    }
+
     const timeSpan = document.createElement("span");
     timeSpan.className = "chat-time";
     timeSpan.textContent = formatTime(msg.timestamp);
     const textNode = document.createTextNode(" " + (msg.text || ""));
 
-    div.appendChild(userSpan);
     div.appendChild(timeSpan);
     div.appendChild(textNode);
     chatMessages.appendChild(div);

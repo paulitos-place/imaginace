@@ -123,8 +123,22 @@ internet was different back then
   <div class="footer">
     visitor number: <span id="counter">0</span>
   </div>
-  <!-- CHAT WIDGET -->
-  <div id="chatToggle">💬 Chat<span id="chatBadge" class="chat-badge hidden"></span></div>
+  <!-- CHAT WIDGET + VIP -->
+  <div class="bottomRightBar">
+    <div id="vipToggle" class="vipToggle" title="VIP Code">
+      <img src="https://i.pinimg.com/originals/05/b9/cc/05b9cc72b0271b8441200e288767850e.jpg" alt="VIP">
+    </div>
+    <div id="chatToggle">💬 Chat<span id="chatBadge" class="chat-badge hidden"></span></div>
+  </div>
+  <div id="vipPopup" class="hidden">
+    <div class="cpInner">
+      <h3>VIP Code eingeben</h3>
+      <input id="vipCodeInput" placeholder="Code">
+      <button id="vipCodeSubmit">Bestätigen</button>
+      <button id="vipCodeCancel">Abbrechen</button>
+      <p id="vipCodeMessage"></p>
+    </div>
+  </div>
   <div id="chatPopup" class="hidden">
     <div class="chat-header">
       <span>imaginace chat</span>
